@@ -1,8 +1,8 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoibmsyOTcwIiwiYSI6ImNreDR4ZTZ4dDBhbngydnF1dzBxNzJvMDkifQ.GXAfMWbXTZ7FOAj3rI2oIg';
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/nk2970/cl3ugy68r000s14pn7v1pfrcq',
-    zoom: 3,
+    style: 'mapbox://styles/nk2970/cl3ykyyqn002815p48ctk0pd3',
+    zoom: 3.5,
     maxZoom:9,
     minZoom:3,
     center: [-100.5, 37.7]
@@ -18,14 +18,14 @@ map.on("load", function () {
           type: "geojson",
           data: "data/countyTypologyCodes.geojson",
         },
-        // maxzoom: 6,
         paint: {
           "line-color": "#ffffff",
           "line-width": 0.05,
         },
       },
-      "waterway-label" // Here's where we tell Mapbox where to slot this new layer
+      "waterway" // Here's where we tell Mapbox where to slot this new layer
     ); 
+  
     map.addLayer(
       {
         id: "pop_loss",
@@ -48,69 +48,9 @@ map.on("load", function () {
       },
     },
  "County_Typology_Codes"
+ 
 );
-
-  
-
-
-
-
-//   map.addLayer(
-//     {
-//       id: "us_counties_elections_outline",
-//       type: "line",
-//       source: {
-//         type: "geojson",
-//         data: "data/countiesElections.geojson",
-//       },
-//       minzoom:6,
-//       paint: {
-//         "line-color": "#ffffff",
-//         "line-width": 0.25,
-//       },
-//     },
-//     "us_states_elections"
-//   );
-//   map.addLayer(
-//     {
-//       id: "us_counties_elections",
-//       type: "fill",
-//       source: {
-//         type: "geojson",
-//         data: "data/countiesElections.geojson",
-//       },
-//       minzoom:6,
-//       paint: {
-//         "fill-color": [
-//           "match",
-//           ["get", "Winner"],
-//           "Donald J Trump",
-//           "#cf635d",
-//           "Joseph R Biden Jr",
-//           "#6193c7",
-//           "Other",
-//           "#91b66e",
-//           "#ffffff",
-//         ],
-//         "fill-outline-color": "#000000",
-//         "fill-opacity": [
-//           "step",
-//           ["get", "WnrPerc"],
-//           0.3,
-//           0.4,
-//           0.5,
-//           0.5,
-//           0.7,
-//           0.6,
-//           0.9,
-//         ],
-//       },
-//     },
-//     "us_counties_elections_outline"
-//   );
-
-
-  });
+});
 
 
 
@@ -125,7 +65,7 @@ map.on('click', 'pop_loss', function (e) {
         + '<h2>' + countyname + '</h2>')
         .addTo(map);
 });
-// Change the cursor to a pointer when the mouse is over the us_states_elections layer.
+// Change the cursor to a pointer when the mouse is over 
 map.on('mouseenter', 'pop_loss', function () {
     map.getCanvas().style.cursor = 'pointer';
 });
@@ -136,143 +76,81 @@ map.on('mouseleave', 'pop_loss', function () {
 
 
 
-// map.on("click", "us_counties_elections", function (e) {
-//   var stateName = e.features[0].properties.State;
-//   var countyName = e.features[0].properties.County;
-//   var winner = e.features[0].properties.Winner;
-//   var wnrPerc = e.features[0].properties.WnrPerc;
-//   var totalVotes = e.features[0].properties.Total;
-//   var imagePath;
-//   if (winner == 'Donald J Trump'){
-//       imagePath = 'img/trump.jpg';
-//   }
-//   else{
-//       imagePath = 'img/biden.jpg';
-//   }
-//   wnrPerc = (wnrPerc * 100).toFixed(0);
-//   totalVotes = totalVotes.toLocaleString();
-//   stateName = stateName.toUpperCase();
-//   countyName = countyName.toUpperCase();
-//   new mapboxgl.Popup()
-//     .setLngLat(e.lngLat)
-//     .setHTML(
-//       "<h4>" +
-//         countyName +
-//         " - " +
-//         stateName +
-//         "</h4>" +
-//         "<h2>" +
-//         winner +
-//         "</h2>" +
-//         "<p>" +
-//         wnrPerc +
-//         "% - (" +
-//         totalVotes +
-//         " votes)<br>"
-//         + '<img src="' + imagePath + '"></p>'
-//     )
-//     .addTo(map);
-// });
-// map.on("mouseenter", "us_counties_elections", function () {
-//   map.getCanvas().style.cursor = "pointer";
-// });
-// map.on("mouseleave", "us_counties_elections", function () {
-//   map.getCanvas().style.cursor = "";
-// });
-
-
 
 // map2
 var map2 = new mapboxgl.Map({
   container: 'map2',
-  style: 'mapbox://styles/nk2970/cl3ugy68r000s14pn7v1pfrcq',
-  zoom: 3,
+  style: 'mapbox://styles/nk2970/cl3zar7m8004r14n9td0sljj5',
+  zoom: 5,
   maxZoom:9,
   minZoom:3,
-  center: [-100.5, 37.7]
+  center: [31.829, 48.770]
 });
 
 
 map2.on("load", function () {
+  let layers = map.getStyle().layers;
+  let firstSymbolId;
+  for (var i = 0; i < layers.length; i++) {
+      if (layers[i].type === 'symbol') {
+          firstSymbolId = layers[i].id;
+          break;
+      }
+  }
+
+
+
 map2.addLayer(
   {
-    id: "us_counties_centroids",
+    id: "ukraine",
     type: "circle",
     source: {
       type: "geojson",
-      data: "data/countiesPoints.geojson",
+      data: "data/ukraineBorderCrossings.geojson",
     },
-    paint: {
-      'circle-radius':
-      ['interpolate', ['linear'], ['zoom'],
-          3, ['max', ['/', ['sqrt', ['abs', ['-', ['get', 'Trump'], ['get', 'Biden']]]], 40], 1],
-          9, ['max', ['/', ['sqrt', ['abs', ['-', ['get', 'Trump'], ['get', 'Biden']]]], 15], 5],
+    'paint': {
+      'circle-color': '#ffd700',
+      'circle-stroke-color': '#0057b7',
+      'circle-stroke-width': 2,
+      'circle-radius': 6,
+
+      'circle-radius': ['interpolate', ['exponential', 2], ['zoom'],
+      10, ['interpolate', ['linear'], ['get', 'ENTRIES_DIFF'],
+          -1, 10,
+          -0.4, 1
       ],
-      "circle-color": [
-        "match",
-        ["get", "Winner"],
-        "Donald J Trump",
-        "#cf635d",
-        "Joseph R Biden Jr",
-        "#6193c7",
-        "Other",
-        "#91b66e",
-        "#ffffff",
-      ],
-      "circle-stroke-color": "#ffffff",
-      "circle-stroke-width": 0.5,
-      "circle-opacity": [
-        "step",
-        ["get", "WnrPerc"],
-        0.3,
-        0.4,
-        0.5,
-        0.5,
-        0.7,
-        0.6,
-        0.9,
-      ],
-    },
-    minzoom: 3,
+      15, ['interpolate', ['linear'], ['get', 'ENTRIES_DIFF'],
+          -1, 25,
+          -0.4, 12
+      ]
+  ],
   },
-  "waterway-label"
+    // minzoom: 3,
+  },firstSymbolId
+  
 );
-
-
 });
 
-// popup
-map2.on('click', 'us_counties_centroids', function (e) {
-var stateName = e.features[0].properties.State;
-var countyName = e.features[0].properties.County;
-var winner = e.features[0].properties.Winner;
-var imagePath;
-    if (winner == 'Donald J Trump'){
-        imagePath = 'img/trump.jpg';
-    }
-    else{
-        imagePath = 'img/biden.jpg';
-    }
-var wnrPerc = e.features[0].properties.WnrPerc;
-var totalVotes = e.features[0].properties.Total;
-wnrPerc = (wnrPerc * 100).toFixed(0);
-totalVotes = totalVotes.toLocaleString();
-stateName = stateName.toUpperCase();
-countyName = countyName.toUpperCase();
 
 
-
-new mapboxgl.Popup()
-    .setLngLat(e.lngLat)
-    .setHTML('<h4>' + countyName + ' - ' + stateName + '</h4>'
-        + '<h2>' + winner + '</h2>'
-        + '<p>' + wnrPerc + '% - (' + totalVotes + ' votes)<br>'
-        + '<img src="' + imagePath + '"></p>')
-    .addTo(map2);
+// popup-----------------------------------------------
+map2.on('click', 'ukraine', function (e) {
+  let countryName = e.features[0].properties.Country;
+  let englishName = e.features[0].properties['Name - English'];
+  let ukranianName = e.features[0].properties['Name - Ukrainian'];
+  
+  new mapboxgl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML('<h4>' + countryName + '</h4>'
+          +'<p>English Name: <b>'+  englishName + '</b></p>'
+          + '<p>Ukraian Name: <b>' + ukranianName + '</b></p>')
+      .addTo(map2);
 });
-map2.on('mouseenter', 'us_counties_centroids', function () {
-map2.getCanvas().style.cursor = 'pointer';
+// Change the cursor to a pointer when the mouse is over 
+map2.on('mouseenter', 'turnstileData', function () {
+  map2.getCanvas().style.cursor = 'pointer';
 });
-map2.on('mouseleave', 'us_counties_centroids', function () {
-map2.getCanvas().style.cursor = '';
+// Change it back to a pointer when it leaves.
+map2.on('mouseleave', 'turnstileData', function () {
+  map2.getCanvas().style.cursor = '';
 });
