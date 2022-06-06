@@ -39,8 +39,8 @@ map.on("load", function () {
           "fill-color": [
             "match",
             ["get", "Pop_Loss_2010"],
-            0, "#f1b8b8",
-            1, "#dc4e4e",
+            0, "#f1b8b8", //pink
+            1, "#dc4e4e", //red
             "#ffffff",
           ],
           "fill-outline-color": "#ffffff",
